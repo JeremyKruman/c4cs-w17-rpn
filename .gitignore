@@ -1,2 +1,3 @@
 default.sublime-workspace
 __pycache__
+*.pdf

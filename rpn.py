@@ -1,39 +1,34 @@
 #!/usr/bin/env python3
 
+import operator
+
+OPERATORS = {
+	'+': operator.add,
+	'-': operator.sub,
+	'*': operator.mul,
+	'/': operator.truediv,
+}
+
+
 def calculate(arg):
-	exIn = arg.split(' ')
-	stack = []
-	ops = ['+', '-']
-	val = 0
-	for ex in exIn:
-		if (ex.isnumeric()):
-			stack.append(int(ex))
-		elif (ex in ops):
-			if (len(stack) < 2):
-				print('Error: Operation defined before valid numbers')
-			else:
-				if(ex == '+'):
-					val = 0
-					while (len(stack) > 0):
-						val = val + stack.pop()
-					stack.append(val)
-				elif(ex == '-'):
-					stack.reverse()
-					val = stack.pop()
-					while(len(stack) > 0):
-						val = val - stack.pop()
-					stack.append(val)
-		else:
-			print('Error: Invalid character entered')
-			break
-	return(val)
-
-
-
+	stack = list()
+	for operand in arg.split():
+		try:
+			operand = float(operand)
+			stack.append(operand)
+		except:
+			arg2 = stack.pop()
+			arg1 = stack.pop()
+			operator_fn = OPERATORS[operand]
+			result = operator_fn(arg1, arg2)
+			
+			stack.append(result)
+	return stack.pop()
 
 def main():
 	while True:
-		calculate(input("rpn calc> "))
+		result = calculate(input('rpn calc> '))
+		print("Result:", result)
 
 if __name__ == '__main__':
 	main()
